@@ -20,7 +20,37 @@ var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines
 mongoose.connect(MONGODB_URI);
 
 //Routes
+//app.get("/scrape", function(req, res) {
+    axios.get("https://phys.org/space-news/").then(function(response) {
+      var $ = cheerio.load(response.data);
+  
+      $("div.d-flex").each(function(i, element) {
+        var result = {};
+  
+        result.img = $(this).children().attr("href");
+        console.log(result.img);
 
+        result.title = $(this).children("h3.mb-1").text();
+        console.log(result.title);
+
+        result.description = $(this).children("p.mb-1").text();
+        console.log(result.description)
+
+        result.url = $(this).children();
+  
+        // Create a new Article using the `result` object built from scraping
+    //     db.Article.create(result)
+    //       .then(function(dbArticle) {
+    //         console.log(dbArticle);
+    //       })
+    //       .catch(function(err) {
+    //         console.log(err);
+    //       });
+    //   });
+
+    //   res.send("Scrape Complete");
+    });
+  });
 
 
 
