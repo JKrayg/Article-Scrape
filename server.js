@@ -11,46 +11,84 @@ var app = express();
 
 app.use(logger("dev"));
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+  extended: true
+}));
 app.use(express.json());
 app.use(express.static("public"));
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+var exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/articleScrape";
 
 mongoose.connect(MONGODB_URI);
 
 //Routes
-//app.get("/scrape", function(req, res) {
-    axios.get("https://phys.org/space-news/").then(function(response) {
-      var $ = cheerio.load(response.data);
-  
-      $("div.d-flex").each(function(i, element) {
-        var result = {};
-  
-        result.img = $(this).children().attr("href");
-        console.log(result.img);
+app.get("/", function(req, res) {
+    res.render("index");
+  });
 
-        result.title = $(this).children("h3.mb-1").text();
-        console.log(result.title);
 
-        result.description = $(this).children("p.mb-1").text();
-        console.log(result.description)
+app.get("/scrape", function (req, res) {
+  axios.get("https://phys.org/space-news/").then(function (response) {
+    var $ = cheerio.load(response.data);
 
-        result.url = $(this).children();
-  
-        // Create a new Article using the `result` object built from scraping
-    //     db.Article.create(result)
-    //       .then(function(dbArticle) {
-    //         console.log(dbArticle);
-    //       })
-    //       .catch(function(err) {
-    //         console.log(err);
-    //       });
-    //   });
+    $("article.sorted-article").each(function (i, element) {
+      var result = {};
 
-    //   res.send("Scrape Complete");
+      result.photoUrl = $(this).children("div.d-flex").children("figure").children("a").children("img").attr("src");
+      console.log("photoUrl: " + result.photoUrl);
+
+      console.log("                                 ");
+      console.log("=================================");
+      console.log();
+
+      result.title = $(this).children("div.d-flex").children("div.sorted-article-content").children("h3").children("a").text();
+      console.log("title: " + result.title);
+
+      console.log("                                 ");
+      console.log("=================================");
+      console.log("                                 ");
+
+      result.description = $(this).children("div.d-flex").children("div.sorted-article-content").children("p").text();
+      console.log("description: " + result.description.trim());
+
+      console.log("                                 ");
+      console.log("=================================");
+      console.log();
+
+      result.url = $(this).children("div.d-flex").children("figure").children("a").attr("href");
+      console.log("url: " + result.url);
+
+      console.log("                                 ");
+      console.log("=================================");
+      console.log();
+
+      db.Article.create(result)
+        .then(function (dbArticle) {
+          console.log(dbArticle);
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
     });
+
+    res.send("Scraped");
   });
+});
+
+app.get("/articles", function (req, res) {
+  db.Article.find({})
+    .then(function (dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function (err) {
+      res.json(err);
+    });
+});
 
 
 
@@ -72,6 +110,6 @@ mongoose.connect(MONGODB_URI);
 
 
 
-app.listen(PORT, function() {
-    console.log("App running on port " + PORT);
-  });
+app.listen(PORT, function () {
+  console.log("App running on port " + PORT);
+});
