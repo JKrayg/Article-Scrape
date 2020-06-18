@@ -24,13 +24,12 @@ app.set("view engine", "handlebars");
 
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/articleScrape";
 
-mongoose.connect(MONGODB_URI);
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 //Routes
 app.get("/", function(req, res) {
-    res.render("index");
-  });
-
+  res.render("index");
+});
 
 app.get("/scrape", function (req, res) {
   axios.get("https://phys.org/space-news/").then(function (response) {
@@ -39,28 +38,50 @@ app.get("/scrape", function (req, res) {
     $("article.sorted-article").each(function (i, element) {
       var result = {};
 
-      result.photoUrl = $(this).children("div.d-flex").children("figure").children("a").children("img").attr("src");
+      result.photoUrl = $(this)
+      .children("div.d-flex")
+      .children("figure")
+      .children("a")
+      .children("img")
+      .attr("src");
+
       console.log("photoUrl: " + result.photoUrl);
 
       console.log("                                 ");
       console.log("=================================");
       console.log();
 
-      result.title = $(this).children("div.d-flex").children("div.sorted-article-content").children("h3").children("a").text();
+      result.title = $(this)
+      .children("div.d-flex")
+      .children("div.sorted-article-content")
+      .children("h3")
+      .children("a")
+      .text();
+
       console.log("title: " + result.title);
 
       console.log("                                 ");
       console.log("=================================");
       console.log("                                 ");
 
-      result.description = $(this).children("div.d-flex").children("div.sorted-article-content").children("p").text();
+      result.description = $(this)
+      .children("div.d-flex")
+      .children("div.sorted-article-content")
+      .children("p")
+      .text();
+
       console.log("description: " + result.description.trim());
 
       console.log("                                 ");
       console.log("=================================");
       console.log();
 
-      result.url = $(this).children("div.d-flex").children("figure").children("a").attr("href");
+      result.url = $(this)
+      .children("div.d-flex")
+      .children("figure")
+      .children("a")
+      .attr("href");
+
       console.log("url: " + result.url);
 
       console.log("                                 ");
@@ -89,6 +110,8 @@ app.get("/articles", function (req, res) {
       res.json(err);
     });
 });
+
+
 
 
 
