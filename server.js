@@ -129,6 +129,7 @@ app.post("/articles/:id", function(req, res) {
 
     })
     .then(function(dbArticle) {
+      console.log(dbArticle);
       res.json(dbArticle);
     })
 
@@ -136,26 +137,6 @@ app.post("/articles/:id", function(req, res) {
       res.json(err);
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

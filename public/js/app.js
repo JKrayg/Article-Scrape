@@ -2,7 +2,7 @@ $.getJSON("/articles", function (data) {
   for (var i = 0; i < data.length; i++) {
     $("#articles").append("<a id='title' target='_blank' href=" + data[i].url + ">" +
       data[i].title + "</a><br><br><p id='description'>" +
-      data[i].description + "</p><br><button id='comment-btn' type='button' data-id=" +
+      data[i].description + "</p><button id='comment-btn' type='button' data-id=" +
       data[i]._id + ">Comment</button><hr>");
   }
 });
@@ -21,13 +21,13 @@ $(document).on("click", "#comment-btn", function () {
     console.log(thisId);
     console.log(data);
     $("#comment-input").append("<h3>" + data.title + "</h3>");
-    $("#comment-input").append("<input id='comment-title' name='title' ><br>");
-    $("#comment-input").append("<textarea id='comment-body' name='body'></textarea><br>");
-    $("#comment-input").append("<button data-id=" + data._id + "id='savecomment'>Submit comment</button>");
+    $("#comment-input").append("<textarea id='comment-body' placeholder='body' name='body'></textarea><br>");
+    $("#comment-input").append("<button data-id='" + data._id + "' id='savecomment'>comment</button>");
+    $("#comments").append("<p>" + data.comment.body + "</p>");
 
     if (data.comment) {
-      $("#comment-title").val(data.comment.title);
       $("#comment-body").val(data.comment.body);
+      
     }
   });
 });
@@ -40,7 +40,6 @@ $(document).on("click", "#savecomment", function() {
     method: "POST",
     url: "/articles/" + thisId,
     data: {
-      title: $("#comment-title").val(),
       body: $("#comment-body").val()
     }
   })
@@ -48,9 +47,10 @@ $(document).on("click", "#savecomment", function() {
     .then(function(data) {
       console.log(data);
       $("#comments").empty();
-      $("#comments").append("<p>" + data.body + "</p>");
+      $("#comments").append("<p>" + data.comment.body + "</p>");
     });
-
+    
+  
   $("#comment-title").val("");
   $("#comment-body").val("");
 });
