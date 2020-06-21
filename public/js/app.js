@@ -4,7 +4,7 @@ $(document).ready(function () {
       $("#articles").append("<a id='title' target='_blank' href=" + data[i].url + ">" +
         data[i].title + "</a><br><br><p id='description'>" +
         data[i].description + "</p><button id='comment-btn' type='button' data-id=" +
-        data[i]._id + ">Comment</button><hr>");
+        data[i]._id + ">Comment</button><br><p id= 'comments' data-id= " + data[i]._id + "><hr>");
     }
   });
 
@@ -56,6 +56,12 @@ $(document).ready(function () {
         .then(function (data) {
           console.log(data);
           $("#comments").empty();
+          var e = $("#comments");
+          e.attr('id', thisId);
+          e.append($("<p data-id= " + thisId + ">" + comment + "</p>"));
+          
+              
+            
         });
         
       $("#comment-body").val("");
