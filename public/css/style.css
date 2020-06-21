@@ -16,11 +16,11 @@ h1 {
     margin-left: 20px;
 }
 
-h3 {
-    background-color: white;
-    border: 1px solid black;
+h4 {
+    background-color: rgb(211, 211, 211);
     padding: 10px;
     margin-right: 20px;
+    margin-bottom: 0px;
 }
 
 .container {
@@ -41,10 +41,22 @@ h3 {
 
 #comment-title {
     margin-top: 10px;
-    width: 50%;
+    width: 75%;
 }
 
 #comment-body {
     margin-top: 5px;
-    width: 96%;
+    border: none;
+    width: 60%;
+}
+
+#title {
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+#comment {
+    border: 1px solid black;
+    height: 20px;
 }
