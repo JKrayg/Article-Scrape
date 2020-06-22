@@ -4,13 +4,13 @@ $(document).ready(function () {
       $("#articles").append("<a id='title' target='_blank' href=" + data[i].url + ">" +
         data[i].title + "</a><br><br><p id='description'>" +
         data[i].description + "</p><button id='comment-btn' type='button' data-id=" +
-        data[i]._id + ">Comment</button><br><p id= 'comments' data-id= " + data[i]._id + "><hr>");
+        data[i]._id + ">Comment</button><br><p id= 'comments' data-id= " + data[i]._id + "></p><hr>");
     }
   });
 
 
   $(document).on("click", "#comment-btn", function () {
-    console.log("clicked: " + $(this).attr("data-id"));
+    //console.log("clicked: " + $(this).attr("data-id"));
     $("#comment-input").empty();
     var thisId = $(this).attr("data-id");
 
@@ -19,7 +19,7 @@ $(document).ready(function () {
       url: "/articles/" + thisId
 
     }).then(function (data) {
-      console.log(thisId);
+      //console.log(thisId);
       console.log(data);
       $("#comment-input").append("<h4>" + data.title + "</h4>");
       $("#comment-input").append("<textarea id='comment-body' placeholder='body' name='body'></textarea><br>");
@@ -28,7 +28,7 @@ $(document).ready(function () {
 
       if (data.comment) {
         $("#comment-body").val(data.comment.body);
-        console.log(data.comment.body)
+        //console.log(data.comment.body)
 
       }
     });
@@ -52,21 +52,34 @@ $(document).ready(function () {
             body: $("#comment-body").val()
           }
         })
-        // With that done
         .then(function (data) {
-          console.log(data);
+          //console.log(data.comment);
           $("#comments").empty();
-          var e = $("#comments");
-          e.attr('id', thisId);
-          e.append($("<p data-id= " + thisId + ">" + comment + "</p>"));
+          var e = $('#comments[data-id="' + data._id + '"]');
+          console.log(e);
+          e.append($("<div style= 'border: 1px solid black; border-radius: 5px; padding: 10px; padding-top: 5px; margin-top: 10px; margin-bottom: 10px; background-color: lightgray' id= 'comment-div'><p style='color:blue; margin-bottom: 5px' data-id= " + data._id + ">" + data.comment + "</p><button id='delete-btn' type='button' data-id=" +
+          data._id + ">Delete</button></div>"));
           
-              
-            
+
+
+
         });
-        
+
       $("#comment-body").val("");
-      
+
     }
 
+  });
+
+  $(document).on("click", "#delete-btn", function () {
+    console.log("clicked")
+    var thisId = $(this).attr("data-id");
+    $.ajax({
+        method: "PUT",
+        url: "/articles/" + thisId
+        })
+      .then(function (data) {
+        console.log(data);
+      })
   });
 });

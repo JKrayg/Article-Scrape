@@ -115,6 +115,7 @@ app.get("/articles/:id", function(req, res) {
   db.Article.findOne({ _id: req.params.id })
     .populate("comment")
     .then(function(dbArticle) {
+      //console.log(dbArticle)
       res.json(dbArticle);
     })
     .catch(function(err) {
@@ -129,6 +130,18 @@ app.post("/articles/:id", function(req, res) {
       return db.Article.findOneAndUpdate({ _id: req.params.id }, { comment: dbComment._id }, { new: true });
 
     })
+    .then(function(dbArticle) {
+      console.log(dbArticle);
+      res.json(dbArticle);
+    })
+
+    .catch(function(err) {
+      res.json(err);
+    });
+});
+
+app.put("/articles/:id", function(req, res) {
+  db.Article.findOneAndUpdate({_id: req.params.id}, {comment: req.params.body})
     .then(function(dbArticle) {
       console.log(dbArticle);
       res.json(dbArticle);
