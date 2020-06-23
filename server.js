@@ -25,6 +25,7 @@ app.set("view engine", "handlebars");
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/articleScrape";
 
 mongoose.connect(MONGODB_URI);
+mongoose.connect("mongodb://heroku_6zcdwp93:6vcgrq4iuqudtg5ibq3d5bsv47@ds149329.mlab.com:49329/heroku_6zcdwp93");
 
 //Routes
 app.get("/", function(req, res) {
