@@ -5,11 +5,7 @@ var axios = require("axios");
 var cheerio = require("cheerio");
 var db = require("./models");
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/articleScrape";
-
-mongoose.connect(MONGODB_URI);
-
-var PORT = process.env.MONGODB_URI || 3000;
+var PORT = process.env.PORT || 3000;
 
 var app = express();
 
@@ -26,7 +22,7 @@ var exphbs = require("express-handlebars");
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/articleScrape";
 
 //Routes
 app.get("/", function(req, res) {
@@ -155,6 +151,7 @@ app.put("/articles/:id", function(req, res) {
 });
 
 
+mongoose.connect(MONGODB_URI);
 
 app.listen(PORT, function () {
   console.log("App running on port " + PORT);
