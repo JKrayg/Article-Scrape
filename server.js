@@ -5,7 +5,11 @@ var axios = require("axios");
 var cheerio = require("cheerio");
 var db = require("./models");
 
-var PORT = process.env.PORT || 3000;
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/articleScrape";
+
+mongoose.connect(MONGODB_URI);
+
+var PORT = process.env.MONGODB_URI || 3000;
 
 var app = express();
 
@@ -22,10 +26,7 @@ var exphbs = require("express-handlebars");
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/articleScrape";
 
-mongoose.connect(MONGODB_URI);
-mongoose.connect("mongodb://heroku_6zcdwp93:6vcgrq4iuqudtg5ibq3d5bsv47@ds149329.mlab.com:49329/heroku_6zcdwp93");
 
 //Routes
 app.get("/", function(req, res) {
