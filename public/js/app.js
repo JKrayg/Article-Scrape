@@ -55,9 +55,9 @@ $(document).ready(function () {
         .then(function (data) {
           //console.log(data.comment);
           $("#comments").empty();
-          var e = $('#comments[data-id="' + data._id + '"]');
+          let e = $('#comments[data-id="' + data._id + '"]');
           console.log(e);
-          e.append($("<div style= 'border: 1px solid black; border-radius: 5px; padding: 10px; padding-top: 5px; margin-top: 10px; margin-bottom: 10px; background-color: lightgray' id= 'comment-div'><p style='color:blue; margin-bottom: 5px' data-id= " + data._id + ">" + data.comment + "</p><button id='delete-btn' type='button' data-id=" +
+          e.append($("<div style= 'border: 1px solid black; border-radius: 5px; padding: 10px; padding-top: 5px; margin-top: 10px; margin-bottom: 10px; background-color: lightgray' id= 'comment-div' data-id= " + data._id + "><p style='color:blue; margin-bottom: 5px' data-id= " + data._id + ">" + comment + "</p><button id='delete-btn' type='button' data-id=" +
           data._id + ">Delete</button></div>"));
           
 
@@ -74,6 +74,10 @@ $(document).ready(function () {
   $(document).on("click", "#delete-btn", function () {
     console.log("clicked")
     var thisId = $(this).attr("data-id");
+    let e = $('#comment-div[data-id="' + thisId + '"]');
+    e.remove();
+    
+
     $.ajax({
         method: "PUT",
         url: "/articles/" + thisId
